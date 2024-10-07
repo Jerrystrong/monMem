@@ -13,7 +13,7 @@ defineProps({
             <slot name="iconForm"></slot>
             <input :type="label.type" :placeholder="label.text" 
             class="bg-transparent placeholder-grayP focus:border-greenLight-400 focus:outline-greenLight-400 w-full absolute top-0 left-0 h-full rounded-md placeholder-shown:text-grayP pl-6 border border-solid border-gray" 
-            :name="label.name" :id="label.name" >
+            :name="label.name" :id="label.name"  :value="label.value?label.value:''">
         </label>
     </div>
 </template>

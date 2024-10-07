@@ -36,7 +36,7 @@ const putFileName=function(e){
                     <img src="/message.svg" alt="user-icon">
                 </template>
                 </SimpleInput>
-                <SimpleInput :label="{label:'Noms',type:'password',text:'Votre nom',name:'userName'}">
+                <SimpleInput :label="{label:'Noms',type:'text',text:'Votre nom',name:'userNom'}">
                     <template #iconForm>
                         <img src="/user.svg" alt="user-icon">
                     </template>
@@ -83,19 +83,19 @@ const putFileName=function(e){
             <div class="font-a p-3 rounded-lg grid gap-3" id="step1" v-if="step===3">
                 <h3 class="text-[16px]">Paramètre compte</h3>
                 <SimpleInput :label="{label:'User name',type:'text',text:'Votre user name',name:'userName'}">
-                <template #iconForm>
-                    <img src="/user.svg" alt="user-icon">
-                </template>
+                    <template #iconForm>
+                        <img src="/user.svg" alt="user-icon">
+                    </template>
                 </SimpleInput>
                 <SimpleInput :label="{label:'Password',type:'password',text:'Votre mot de passe',name:'userPw'}">
-                <template #iconForm>
-                    <img src="/passIcon.svg" alt="user-icon">
-                </template>
+                    <template #iconForm>
+                        <img src="/passIcon.svg" alt="user-icon">
+                    </template>
                 </SimpleInput>
                 <SimpleInput :label="{label:'Confirm password',type:'password',text:'confirmez le mot de passe',name:'userPw'}">
-                <template #iconForm>
-                    <img src="/passIcon.svg" alt="user-icon">
-                </template>
+                    <template #iconForm>
+                        <img src="/passIcon.svg" alt="user-icon">
+                    </template>
                 </SimpleInput>
             </div>
 

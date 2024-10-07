@@ -35,7 +35,18 @@ const router = createRouter({
         path:'/app/:id',
         name:'app',
         component:()=> import('../views/apphomeView.vue')
-      },{ path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
+      },
+      {
+        path:'/app/:id/parametre',
+        name:'parametre',
+        component:()=> import('../views/parametre.vue')
+      },
+      {
+        path:'/app/:id/historique',
+        name:'historique',
+        component:()=> import('../views/historiqueView.vue')
+      },
+      { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
   ]
 })
 

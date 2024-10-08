@@ -46,6 +46,11 @@ const router = createRouter({
         name:'historique',
         component:()=> import('../views/historiqueView.vue')
       },
+      {
+        path:'/app/:id/live',
+        name:'recording',
+        component:()=> import('../views/liveRecording.vue')
+      },
       { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
   ]
 })

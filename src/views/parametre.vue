@@ -168,14 +168,13 @@ import SimpleInput from '../components/simpleInput.vue';
                         </div>
                     </div>
                     <!-- add familly member section  -->
-                    <div class="absolute w-full bg-white left-0 -top-[100%] shadow p-2" v-show="addMemberLevel">
+                    <div class="absolute w-full bg-white left-0 -top-[100%] shadow p-2 grid gap-1 rounded-lg" v-show="addMemberLevel">
                         <img src="/close1.png" alt="" class="w-3 ml-[90%] cursor-pointer" @click="addMember">
                         <h3>Add member</h3>
                         <p>Profil</p>
                         <label for="Profil" class="flex items-center flex-col justify-center relative" v-if="!userProfil">
                             <input type="file" name="userProfil" id="Profil" class="w-full" @change="putFileName">
                         </label>
-                        <p>Noms</p>
                         <SimpleInput :label="{label:'Noms',type:'text',text:'Votre nom',name:'userNom'}">
                             <template #iconForm>
                                 <img src="/user.svg" alt="user-icon">
@@ -209,7 +208,7 @@ import SimpleInput from '../components/simpleInput.vue';
                     <div class="famillyMember bg-white w-[90%] md:w-[100%] lg:w-[60%] m-auto h-full p-3 flex flex-col gap-1 rounded-t-lg relative">
                         <h3>Your devices </h3>
                         <!-- add device member section  -->
-                        <div class="absolute w-full bg-white left-0 -top-[100%] shadow p-2" v-show="addDeviseLevel">
+                        <div class="absolute w-full bg-white left-0 -top-[100%] shadow p-2 rounded-lg" v-show="addDeviseLevel">
                             <img src="/close1.png" alt="" class="w-3 ml-[90%] cursor-pointer" @click="addDevise">
                             <h3>Add device</h3>
                             <SimpleInput :label="{label:'Noms',type:'text',text:'Votre nom',name:'userNom'}">

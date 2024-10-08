@@ -119,7 +119,7 @@ import { useRouter } from 'vue-router';
                             <img src="/coupeProfJey.png" alt="" class="rounded-[50%] object-cover h-full -z-20 md:z-10 hover:scale-105 cursor-pointer">
                             <div class="rounded-[50%] object-cover h-full w-7 bg-white -translate-x-1 -z-30 md:z-0 hover:scale-105 cursor-pointer"></div>
                         </div>
-                        <button class="bg-black text-white flex gap-2 rounded-2xl w-fil truncate  hover:scale-105">
+                        <a class="bg-black text-white flex items-center px-2 gap-2 rounded-2xl w-fil truncate  hover:scale-105"  :href="'/app/'+currentUserId+'/parametre'">
                             <span>
                                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <rect width="30" height="30" fill="url(#pattern0_43_33)"/>
@@ -132,13 +132,13 @@ import { useRouter } from 'vue-router';
                                     
                                 </svg>
                             </span><span class="hidden lg:block">Ajouter vos configurations</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
                 <div>
                     <div class="bg-white w-4/4 p-2 md:w-3/4 h-fit m-auto rounded-lg flex justify-center flex-col md:p-3 lg:p-3">
                         <h3 class="px-3 font-bold">Lancer l’assistance intélligente</h3>
-                        <button class="bg-greenLight-500 text-white flex items-center gap-2 rounded-2xl w-fill m-auto  hover:scale-105">
+                        <a class="bg-greenLight-500 text-white flex items-center gap-2 rounded-2xl w-fill m-auto  hover:scale-105 p-1 px-3" :href="'/app/'+currentUserId+'/live'">
                             <span class="border border-dashed border-white rounded-[50%] p-[5px]">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <rect width="20" height="20" fill="url(#pattern0_43_39)"/>
@@ -150,7 +150,7 @@ import { useRouter } from 'vue-router';
                                     </defs>
                                 </svg>
                             </span>Lancer les service
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -216,9 +216,7 @@ import { useRouter } from 'vue-router';
     </div>
 </template>
 <style scoped>
-    .color-2{
-        background: rgba(192, 57, 57, 0.372);
-    }
+    
     .text-color-2{
         color:rgb(93, 2, 2);
     }

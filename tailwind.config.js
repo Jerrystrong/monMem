@@ -25,7 +25,8 @@ export default {
           500:"#56877B",
         },
         darkLight:"#485563",
-        grayP:"CACACA"
+        grayP:"#CACACA",
+        redBold:"#925E5E"
       }
     },
   },

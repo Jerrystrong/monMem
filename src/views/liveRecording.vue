@@ -63,7 +63,7 @@
                 </div>
             </div>
 
-            <div class="w-[90%] m-auto">
+            <div class="w-[90%] m-auto my-3">
                 <h3 class="text-[18px] font-bold">Surveillance en direct</h3>
                 <video src="/mike.mp4" poster="/coupeProfJey.png" class="w-full" controls muted></video>
                 <div class="decteting my-3">

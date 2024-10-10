@@ -19,12 +19,12 @@ import { useRouter } from 'vue-router';
     <div class="w-dvww h-dvh flex items-center justify-center">
         <div class="toggleMenu lg:w-[20%] md:w-[30%] w-[10%]  h-full bg-white rounded-lg">
            <div class="flex flex-col items-center gap-5 fixed  lg:w-[20%] md:w-[30%] w-[10%]">
-            <h1 class="text-black text-[36px] p-3 absolute left-[100%] md:relative md:left-0 md:w-fit w-screen bg-white z-20" >
+            <h1 class="text-black text-[36px] p-1 absolute left-[100%] md:relative md:left-0 md:w-fit w-screen bg-white z-20" >
                 <!-- :class="{'bg-white z-50':scrol}" -->
                 SecureAIOp
             </h1>
             <!-- button user info -->
-            <div class="border border-grayP border-solid rounded-md flex items-center justify-between p-2 w-[90%]">
+            <div class="border border-grayP border-solid rounded-md flex items-center justify-between p-1 mt-1 md:mt-0 md:p-2 w-[90%]">
                 <div class="profImage w-[100%] lg:w-[30%] p-0 md:p-1"><img src="/coupeProfJey.png" alt="" class="rounded-[50%] object-cover"></div>
                 <div class="userInfo hidden md:block">
                     <p>Jeremie K.</p>
@@ -45,7 +45,7 @@ import { useRouter } from 'vue-router';
 
             <!-- menu side -->
             <div class="flex flex-col gap-2 w-full">
-                <a :href="'/app/'+currentUserId+'/'" class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 m-auto">
+                <RouterLink :to="'/app/'+currentUserId+'/'" class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 m-auto">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <rect width="18" height="18" fill="url(#pattern0_41_15)"/>
                         <defs>
@@ -57,8 +57,8 @@ import { useRouter } from 'vue-router';
                     </svg>
 
                     <span class="hidden md:block">Acceuil</span>
-                </a>
-                <a :href="'/app/'+currentUserId+'/historique'" class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 m-auto">
+                </RouterLink>
+                <RouterLink :to="'/app/'+currentUserId+'/historique'" class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 m-auto">
                     <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <rect width="30" height="30" fill="url(#pattern0_43_59)"/>
                         <defs>
@@ -69,8 +69,8 @@ import { useRouter } from 'vue-router';
                         </defs>
                     </svg>
                     <span class="hidden md:block">Historiques d'enr</span>
-                </a>
-                <a :href="'/app/'+currentUserId+'/parametre'"  class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 m-auto">
+                </RouterLink>
+                <RouterLink :to="'/app/'+currentUserId+'/parametre'"  class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 m-auto">
                     <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <rect width="30" height="30" fill="url(#pattern0_43_60)"/>
                         <defs>
@@ -81,7 +81,7 @@ import { useRouter } from 'vue-router';
                         </defs>
                     </svg>
                     <span class="hidden md:block">Parametre</span>
-                </a>
+                </RouterLink>
             </div>
 
              <a href=""  class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 mt-7 text-color-2">

@@ -1,5 +1,2 @@
-# Vue 3 + Vite
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+# Voici mon Projet de defense License degree
+For my last projet in the university i'm going to build a app web mobile with Ai integrated in side that can help user to control his home thanks to the powerfull of deep learning and cnn so that the app side is build with html,css,js,tailwindcss as css framework and vuejs for js framework and that is all about frondEnd and for backend i used nodejs and express with no-sql database mongodb as database management

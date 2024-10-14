@@ -1,18 +1,44 @@
 <script setup>
 import { onMounted, ref, useTemplateRef } from 'vue';
 import navigation from '../components/navigation.vue';
+import { useRouter }  from 'vue-router';
+import {fetchD} from '../composable/getData.js'
+
 const isNotconnected=ref(true)
 const profil =useTemplateRef('profil')
 const targe=ref(10)
+const router=useRouter()
 const scroL=()=>{
     console.log('click')
     profil.value.scrollX(targe.value)   
 }
-// console.log(input.value)
-// onMounted(()=>{
-//     input.value.focus()
-//     input.value.value="jerry"
-// })
+const goToapp=async()=>{
+    // console.log(router)
+    // router.push({ name: 'about'})
+    try {
+        const data = await fetchD({}, 'checkRoute','GET');
+        if(!data) return {"state":"user not found"}
+        console.log(data)
+        router.push(`/app/${data.data._id}`)
+
+    } catch (error) {
+        router.push(`/signin`)
+        console.error('Erreur lors de la soumission du formulaire:', error);
+    }
+}
+onMounted(async ()=>{
+    try {
+        const data = await fetchD({}, 'checkRoute','GET');
+        if(!data) return {"state":"user not found"}
+        console.log(data)
+        router.push(`/app/${data.data._id}`)
+
+    } catch (error) {
+        // router.push(`/singin`)
+        console.error('Erreur lors de la soumission du formulaire:', error);
+    }
+})
+
 </script>
 <template>
    <header>
@@ -29,7 +55,7 @@ const scroL=()=>{
                     vos entrées  et sorties.
                 </p>
                 <div class="btn-group" className="flex flex-col md:flex-row justify-start items-center md:items-start mx-0 md:mx-5 gap-2 md:gap-10 relative">
-                    <a className="bg-yellowB font-bold rounded-2xl py-[10px] px-[20px] cursor-pointer hover:bg-yellow-50 transition-all hover:border border-yellowB text-bg-yellow-950 truncate" id="exploreBtn" href="#">Explorer le puissant AI </a>
+                    <a className="bg-yellowB font-bold rounded-2xl py-[10px] px-[20px] cursor-pointer hover:bg-yellow-50 transition-all hover:border border-yellowB text-bg-yellow-950 truncate" id="exploreBtn" @click.prevent="goToapp">Explorer le puissant AI </a>
                     <a className="bg-greenLight-400 font-bold rounded-2xl py-[10px] px-[20px] text-yellow-50 cursor-pointer hover:bg-green-50 transition-all hover:border border-greenLight-400 hover:text-green-950 truncate w-fit" id="seeDemoBtn" href="#">Voir une demo</a>
                     <img src="/Vector 3.svg" alt="vector-sensor" className="absolute w-7 md:right-7 -right-5 ">
                 </div>
@@ -127,6 +153,7 @@ const scroL=()=>{
         </div>
         <!-- <input type="text" ref="inp" placeholder="sdjhdsjh">jkjdjs -->
    </main>
+  <!-- <RouterView /> -->
 </template>
 <style scoped>
     .oo{

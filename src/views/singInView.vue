@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue';
-import SimpleInput from '../components/simpleInput.vue';
+import SimpleInput from '../components/simpleInput.vue';    
+import { useRoute, useRouter } from 'vue-router';
+import {fetchD} from '../composable/fetchData.js'
+const router=useRouter()
 const navHash=(e)=>{
     console.log('click')
     let currentUrl=ref(window.location.hash)
@@ -11,11 +14,34 @@ const navHash=(e)=>{
         this.location.assign(currentUrl.value.slice(1))
     })
 }
+const userEmail=ref('')
+const userPw=ref('')
+// variable pour afficher les erreurs
+const stateError=ref('')
+
+
+const submitForm = async () => {
+    console.log(userEmail.value);
+
+    try {
+        const data = await fetchD({ userEmail: userEmail.value, userPw: userPw.value }, 'singin',"POST");
+        if(data.status==='success'){
+            router.push(`/app/${data.Data._id}`)
+        }else{
+            console.log(data.message)
+            stateError.value=data.message
+        }
+
+    } catch (error) {
+        console.error('Erreur lors de la soumission du formulaire:', error);
+    }
+};
 </script>
 <template>
     <div class="w-screen h-screen flex justify-center items-center">
        <div class="flex flex-col items-center gap-3 w-[250px] content-center">
         <h2>SecureAIOp</h2>
+        <h4>{{ stateError }}</h4>
         <button id="googleLog" 
         class="border border-solid border-greenLight-400 font-bold
          w-full flex gap-2 px-3 text-[14px] justify-center
@@ -28,21 +54,21 @@ const navHash=(e)=>{
             <div class="line w-[20%]"></div>
         </div>
         <form action="" class="font-a p-3 rounded-lg grid gap-3 w-full">
-            <SimpleInput :label="{label:'E-mail',type:'email',text:'Votre email',name:'userEmail'}">
+            <SimpleInput :label="{label:'E-mail',type:'email',text:'Votre email',name:'userEmail'}" v-model="userEmail">
                 <template #iconForm>
                     <img src="/user.svg" alt="user-icon">
                 </template>
             </SimpleInput>
-            <SimpleInput :label="{label:'Mot de passe',type:'password',text:'Votre mot de passe',name:'userPw'}">
+            <SimpleInput :label="{label:'Mot de passe',type:'password',text:'Votre mot de passe',name:'userPw'}" v-model="userPw">
                 <template #iconForm>
                     <img src="/passIcon.svg" alt="user-icon">
                 </template>
             </SimpleInput>
-            <input type="submit" value="Se connecter" class="p-1 rounded-lg font-bold cursor-pointer transition-all bac-btn">
+            <input type="submit" value="Se connecter" class="p-1 rounded-lg font-bold cursor-pointer transition-all bac-btn" @click.prevent="submitForm">
         </form>
         <div class="p-2 text-[14px] rounded-lg text-center bac-transparent">
             <p>Je suis nouveau à cet application </p>
-            <a href="/signup" class="text-greenLight-500">Créer un compte</a>
+            <router-link to="/signup" class="text-greenLight-500">Créer un compte</router-link>
         </div>
        </div>
     </div>

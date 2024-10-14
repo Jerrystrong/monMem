@@ -1,6 +1,8 @@
 <script setup>
-import { ref, useTemplateRef } from 'vue';
+import { onMounted, ref, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
+import {fetchD} from '../composable/fetchData.js'
+import {decon} from '../composable/deconnection.js'
 import SimpleInput from '../components/simpleInput.vue';
     const router=useRouter()
     console.log(router.currentRoute.value.params)
@@ -12,6 +14,7 @@ import SimpleInput from '../components/simpleInput.vue';
         isVisible.value=isVisible.value===user?0:user
         
     }
+    console.log(currentUserId.value)
     // add familly member logic
     const addMemberLevel=ref(false)
     const addMember=()=>{
@@ -21,7 +24,90 @@ import SimpleInput from '../components/simpleInput.vue';
     const addDevise=()=>{
         addDeviseLevel.value=!addDeviseLevel.value
     }
+
+    const userRole=ref('Admin')
+    const userNom=ref('')
+    const userProfil=ref('')
     
+    const stateError=ref('')
+    const dataUser=ref('')
+  
+    const putFileName=(e)=>{
+        userProfil.value=e.currentTarget.files[0].name
+    }
+    // fonction pour ajouter le membre de la famille
+    const updateFamily=async ()=>{
+        const d={memberNom:userNom.value,memberRole:userRole.value,memberProfil:userProfil.value}
+        console.log(d)
+        try {
+            const data = await fetchD({member:d}, `app/${currentUserId.value}/addFamilly`,"POST");
+            if(data.status==='success'){
+                console.log(data.data)
+                // router.push(`/app/${data.Data._id}`)
+                window.location.reload()
+            }else{
+                console.log(data.message)
+                stateError.value=data.message
+            }
+
+        } catch (error) {
+            console.error('Erreur lors de la soumission du formulaire:', error.message);
+        }
+    }
+    // fonction pour ajouter des equipements
+    const deviceIp=ref('')
+    const deviceNom=ref('')
+    const addDevises=async ()=>{
+        const d={deviceNom:deviceNom.value,deviceIp:deviceIp.value}
+        console.log(d)
+        try {
+            const data = await fetchD({member:d}, `app/${currentUserId.value}/addDevice`,"POST");
+            if(data.status==='success'){
+                console.log(data.data)
+                // router.push(`/app/${data.Data._id}`)
+                window.location.reload()
+            }else{
+                console.log(data.message)
+                stateError.value=data.message
+            }
+
+        } catch (error) {
+            console.error('Erreur lors de la soumission du formulaire:', error.message);
+        }
+    }
+    // mise en jour auto des donnees au refresh
+    onMounted(async()=>{
+    try {
+        const data = await fetchD({}, `app/${currentUserId.value}/parametre`,"POST");
+        if(data.status==='success'){
+            console.log(data.data)
+            dataUser.value=data.data
+            // router.push(`/app/${data.Data._id}`)
+        }else{
+            console.log(data.message)
+            stateError.value=data.message
+        }
+
+    } catch (error) {
+        console.error('Erreur lors de la soumission du formulaire:', error.message);
+    }
+})
+// fonction pour la deconnection
+const deconection=async function decon(){
+    try {
+        const data = await fetchD({}, `logout`,"POST");
+        if(data.status==='success'){
+            console.log(data.message)
+            router.push(`/`)
+        }else{
+            console.log(data.message)
+            stateError.value=data.message
+        }
+    
+    } catch (error) {
+        console.error('Erreur lors de la soumission du formulaire:', error.message);
+    }
+}
 </script>
 <template>
     <div class="w-dvww h-dvh flex items-center justify-center">
@@ -92,7 +178,7 @@ import SimpleInput from '../components/simpleInput.vue';
                 </RouterLink>
             </div>
 
-             <a href=""  class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 mt-7 text-color-2">
+             <a class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 mt-7 text-color-2"  @click.prevent="deconection">
                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <rect width="30" height="30" fill="url(#pattern0_43_58)"/>
                     <defs>
@@ -113,17 +199,17 @@ import SimpleInput from '../components/simpleInput.vue';
                 <h2>Parametres</h2>
                 <h3>Informations personnel</h3>
                 <div class="grid md:grid-cols-2 gap-4 m-4 md:m-1">
-                    <SimpleInput :label="{label:'E-mail',type:'email',text:'Votre email',name:'userEmail',value:'jeremiekimpioka52@gmail.com'}">
+                    <SimpleInput :label="{label:'E-mail',type:'email',text:'',name:'userEmail'}" v-model="dataUser.userEmail">
                         <template #iconForm>
                             <img src="/message.svg" alt="user-icon">
                         </template>
                     </SimpleInput>
-                    <SimpleInput :label="{label:'User name',type:'text',text:'Votre user name',name:'userName',value:'@jeyKimp'}">
+                    <SimpleInput :label="{label:'User name',type:'text',text:'',name:'userName'}" v-model="dataUser.userName">
                         <template #iconForm>
                             <img src="/user.svg" alt="user-icon">
                         </template>
                     </SimpleInput>
-                    <SimpleInput :label="{label:'Noms',type:'text',text:'Votre nom',name:'userNom',value:'Jeremie Kimpioka Tandu'}">
+                    <SimpleInput :label="{label:'Noms',type:'text',text:'Votre nom',name:'userNom'}" v-model="dataUser.userNom">
                         <template #iconForm>
                             <img src="/user.svg" alt="user-icon">
                         </template>
@@ -137,7 +223,7 @@ import SimpleInput from '../components/simpleInput.vue';
                         <img src="/coupeProfJey.png" alt="" class="h-full rounded-[50%]">
                         <p>Changer le profil</p>
                     </div>
-                    <SimpleInput :label="{label:'Confirm password',type:'password',text:'confirmez le mot de passe',name:'userPw'}">
+                    <SimpleInput :label="{label:'Confirm password',type:'password',text:'confirmez le mot de passe',name:'userProfil'}">
                         <template #iconForm>
                             <img src="/passIcon.svg" alt="user-icon">
                         </template>
@@ -149,16 +235,17 @@ import SimpleInput from '../components/simpleInput.vue';
             <div class="additionalSetting grid md:grid-cols-2  my-4 gap-2">
                 <div class="famillyMember bg-white w-[90%] md:w-[100%] lg:w-[70%] m-auto h-full p-3 flex flex-col gap-1 rounded-t-lg relative">
                     <h3>Family member</h3>
-                    <div class="itemFamilly flex justify-between items-center relative" >
+                    <div class="itemFamilly flex justify-between items-center relative"  v-for="member in dataUser.famillyMember" :key="member">
                         <img src="/coupeProfJey.png" alt="" class="rounded-[50%] w-5 h-5">
-                        <p>Jeremie Kimpioka</p>
+                        <p>{{ member.memberNom }}</p>
                         <img src="/more.png" alt="" class="h-fit cursor-pointer" @click="detailUser(1)">
                         <div class="bg-greenLight-500 w-7 h-7 absolute right-0 -top-6 grid p-1 text-white text-sm" v-show="isVisible===1" ref="user1">
                             <span class="w-full truncate cursor-pointer hover:greenLight-400">Suppr</span>
                             <span class="w-full truncate cursor-pointer">Modif</span>
                         </div>
                     </div>
-                     <div class="itemFamilly flex justify-between items-center relative">
+
+                     <!-- <div class="itemFamilly flex justify-between items-center relative">
                         <img src="/coupeProfJey.png" alt="" class="rounded-[50%] w-5 h-5">
                         <p>Jeremie Kimpioka</p>
                         <img src="/more.png" alt="" class="h-fit cursor-pointer" @click="detailUser(2)">
@@ -166,7 +253,7 @@ import SimpleInput from '../components/simpleInput.vue';
                             <span class="w-full truncate cursor-pointer hover:greenLight-400">Suppr</span>
                             <span class="w-full truncate cursor-pointer">Modif</span>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- add familly member section  -->
                     <div class="absolute w-full bg-white left-0 -top-[100%] shadow p-2 grid gap-1 rounded-lg" v-show="addMemberLevel">
                         <img src="/close1.png" alt="" class="w-3 ml-[90%] cursor-pointer" @click="addMember">
@@ -175,23 +262,25 @@ import SimpleInput from '../components/simpleInput.vue';
                         <label for="Profil" class="flex items-center flex-col justify-center relative" v-if="!userProfil">
                             <input type="file" name="userProfil" id="Profil" class="w-full" @change="putFileName">
                         </label>
-                        <SimpleInput :label="{label:'Noms',type:'text',text:'Votre nom',name:'userNom'}">
+                        <SimpleInput :label="{label:'Noms',type:'text',text:'Votre nom',name:'userNom'}" v-model="userNom">
                             <template #iconForm>
                                 <img src="/user.svg" alt="user-icon">
                             </template>
                         </SimpleInput>
 
                         <label for="genre">Genre</label>
-                        <select name="userGenre" id="genre" 
-                        class="h-5 rounded-md border border-l-grayP bg-transparent font-bold text-greenLight-500">
-                            <option value="homme">Admin</option>
-                            <option value="femme">Simple Familly member</option>
+                        <select name="userRole" id="genre" 
+                        class="h-5 rounded-md border border-l-grayP bg-transparent font-bold text-greenLight-500" v-model="userRole">
+                            <option value="Admin">Admin</option>
+                            <option value="Simple Familly member">Simple Familly member</option>
                         </select>
-                        <div class="memberAdd bg-greenLight-500 w-fit p-2 rounded-lg text-xs text-white">
+                        <div class="memberAdd bg-greenLight-500 w-fit p-2 rounded-lg text-xs text-white cursor-pointer" @click="updateFamily">
                         Ajouter
                     </div>
 
                     </div>
+                    <!-- end of add -->
+
                     <div class="memberAdd bg-greenLight-500 w-fit p-2 rounded-[50%] self-end" @click="addMember">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <rect width="20" height="20" fill="url(#pattern0_45_218)"/>
@@ -211,27 +300,28 @@ import SimpleInput from '../components/simpleInput.vue';
                         <div class="absolute w-full bg-white left-0 -top-[100%] shadow p-2 rounded-lg" v-show="addDeviseLevel">
                             <img src="/close1.png" alt="" class="w-3 ml-[90%] cursor-pointer" @click="addDevise">
                             <h3>Add device</h3>
-                            <SimpleInput :label="{label:'Noms',type:'text',text:'Votre nom',name:'userNom'}">
+                            <SimpleInput :label="{label:'Noms',type:'text',text:'Votre nom',name:'userNom'}" v-model="deviceNom">
                                 <template #iconForm>
                                     <img src="/user.svg" alt="user-icon">
                                 </template>
                             </SimpleInput>
-                            <SimpleInput :label="{label:'Devise Ip',type:'text',text:'l\'adresse ip de l\'equipement',name:'userNom'}">
+                            <SimpleInput :label="{label:'Devise Ip',type:'text',text:'l\'adresse ip de l\'equipement',name:'userNom'}" v-model="deviceIp">
                                 <template #iconForm>
                                     <img src="/user.svg" alt="user-icon">
                                 </template>
                             </SimpleInput>
 
-                            <div class="memberAdd bg-greenLight-500 w-fit p-2 rounded-lg text-xs text-white">
+                            <div class="memberAdd bg-greenLight-500 w-fit p-2 rounded-lg text-xs text-white" @click="addDevises">
                             Ajouter
                         </div>
                      </div>
-                    <div class="itemFamilly flex justify-between items-center font-a p-2 rounded-lg">
-                        <p>Système d’Alerte</p>
+                     <!-- END OF POOPOP ADD DEVISE -->
+                    <div class="itemFamilly flex justify-between items-center font-a p-2 rounded-lg" v-for="member in dataUser.userDevices" :key="member">
+                        <p>{{ member.deviceNom }}</p>
                         <img src="/more.png" alt="" class="h-fit cursor-pointer" >
                     </div>
                     
-                    <div class="memberAdd bg-greenLight-500 w-fit p-2 rounded-lg text-xs text-white cursor-pointer" @click="addDevise">
+                    <div class="memberAdd bg-greenLight-500 w-fit p-2 rounded-lg text-xs text-white cursor-pointer " @click="addDevise">
                         Ajouter un equipement
                     </div>
                 </div>

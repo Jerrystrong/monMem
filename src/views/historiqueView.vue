@@ -2,12 +2,29 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import SimpleInput from '../components/simpleInput.vue';
+import {fetchD} from '../composable/fetchData.js'
+import {decon} from '../composable/deconnection.js'
     const router=useRouter()
     console.log(router.currentRoute.value.params)
     const currentUserId= ref('')
     currentUserId.value=router.currentRoute.value.params['id']
     const scrol=ref(false)
-    
+    // fonction pour la deconnection
+    const deconection=async function decon(){
+        try {
+            const data = await fetchD({}, `logout`,"POST");
+            if(data.status==='success'){
+                console.log(data.message)
+                router.push(`/`)
+            }else{
+                console.log(data.message)
+                stateError.value=data.message
+            }
+        
+        } catch (error) {
+            console.error('Erreur lors de la soumission du formulaire:', error.message);
+        }
+    }
 </script>
 <template>
     <div class="w-dvww h-dvh flex items-center justify-center">
@@ -78,7 +95,7 @@ import SimpleInput from '../components/simpleInput.vue';
                 </RouterLink>
             </div>
 
-             <a href=""  class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 mt-7 text-color-2">
+             <a href=""  class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 mt-7 text-color-2" @click.prevent="deconection">
                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <rect width="30" height="30" fill="url(#pattern0_43_58)"/>
                     <defs>

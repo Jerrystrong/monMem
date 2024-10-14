@@ -4,6 +4,7 @@ import { ref } from 'vue';
 defineProps({
     label:Object,
 })
+const model=defineModel()
 </script>
 <template>
     <div class="form-group flex flex-col gap-1 fontS text-[14px]">
@@ -13,7 +14,7 @@ defineProps({
             <slot name="iconForm"></slot>
             <input :type="label.type" :placeholder="label.text" 
             class="bg-transparent placeholder-grayP focus:border-greenLight-400 focus:outline-greenLight-400 w-full absolute top-0 left-0 h-full rounded-md placeholder-shown:text-grayP pl-6 border border-solid border-gray" 
-            :name="label.name" :id="label.name"  :value="label.value?label.value:''">
+            :name="label.name" :id="label.name"  v-model="model" required>
         </label>
     </div>
 </template>

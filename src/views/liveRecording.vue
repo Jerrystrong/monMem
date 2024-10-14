@@ -1,3 +1,4 @@
+
 <template>
     <div class="flex items-start justify-center w-screen h-dvh md:w-1/2 md:m-auto">
         <div class="w-full">
@@ -21,8 +22,8 @@
                 </div>
                 <div class="m-2">
                     <h2>SecureAIOp</h2>
-                    <p class="font-bold">Jeremie K.</p>
-                    <p>@jey1666</p>
+                    <p class="font-bold">{{ dataUser.userNom }}</p>
+                    <p>{{ dataUser.userName }}</p>
                 </div>
             </div>
             
@@ -90,7 +91,23 @@
 
 <script setup>
 import DetectionComponent from '../components/detectionComponent.vue';
+import { onMounted, ref } from 'vue';
+import {fetchD} from '../composable/getData.js'
 
+const  dataUser= ref()
+onMounted(async()=>{
+    try {
+        const data = await fetchD({}, 'checkRoute','GET');
+        if(!data) return {"state":"user not found"}
+        console.log(data)
+        dataUser.value=data.data
+        // router.push(`/app/${data.data._id}`)
+
+    } catch (error) {
+        // router.push(`/singin`)
+        console.error('Erreur lors de la soumission du formulaire:', error);
+    }
+})
 </script>
 
 <style>

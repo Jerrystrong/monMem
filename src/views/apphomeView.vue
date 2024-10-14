@@ -1,19 +1,31 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import {fetchD} from '../composable/fetchData.js'
+import {decon} from '../composable/deconnection.js'
     const router=useRouter()
     console.log(router.currentRoute.value.params)
     const currentUserId= ref('')
     currentUserId.value=router.currentRoute.value.params['id']
     const scrol=ref(false)
-    // const isScrolled=(e)=>{
-    //     if(e.target.scrollY>5){
-    //         scrol.value=!scrol.value
-    //     }
-    //     scrol.value=!scrol.value
-    //     console.log(e)
-    //     console.log(e.target.scrollY)
-    // }
+
+
+    // fonction pour la deconnection
+    const deconection=async function decon(){
+        try {
+            const data = await fetchD({}, `logout`,"POST");
+            if(data.status==='success'){
+                console.log(data.message)
+                router.push(`/`)
+            }else{
+                console.log(data.message)
+                stateError.value=data.message
+            }
+        
+        } catch (error) {
+            console.error('Erreur lors de la soumission du formulaire:', error.message);
+        }
+    }
 </script>
 <template>
     <div class="w-dvww h-dvh flex items-center justify-center">
@@ -84,7 +96,7 @@ import { useRouter } from 'vue-router';
                 </RouterLink>
             </div>
 
-             <a href=""  class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 mt-7 text-color-2">
+             <a href=""  class="flex items-center font-a w-[90%] p-2 rounded-lg gap-3 mt-7 text-color-2" @click.prevent="deconection">
                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <rect width="30" height="30" fill="url(#pattern0_43_58)"/>
                     <defs>
@@ -138,7 +150,7 @@ import { useRouter } from 'vue-router';
                 <div>
                     <div class="bg-white w-4/4 p-2 md:w-3/4 h-fit m-auto rounded-lg flex justify-center flex-col md:p-3 lg:p-3">
                         <h3 class="px-3 font-bold">Lancer l’assistance intélligente</h3>
-                        <a class="bg-greenLight-500 text-white flex items-center gap-2 rounded-2xl w-fill m-auto  hover:scale-105 p-1 px-3" :href="'/app/'+currentUserId+'/live'">
+                        <router-link class="bg-greenLight-500 text-white flex items-center gap-2 rounded-2xl w-fill m-auto  hover:scale-105 p-1 px-3" :to="'/app/'+currentUserId+'/live'">
                             <span class="border border-dashed border-white rounded-[50%] p-[5px]">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <rect width="20" height="20" fill="url(#pattern0_43_39)"/>
@@ -150,7 +162,7 @@ import { useRouter } from 'vue-router';
                                     </defs>
                                 </svg>
                             </span>Lancer les service
-                        </a>
+                        </router-link>
                     </div>
                 </div>
             </div>

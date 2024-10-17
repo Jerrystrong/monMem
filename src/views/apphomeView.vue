@@ -1,8 +1,11 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import {fetchD} from '../composable/fetchData.js'
-import {decon} from '../composable/deconnection.js'
+import {decon} from '../composable/deconnection.js';
+import {fetchD as fetchDD} from '../composable/getData.js';
+import ValidationAccount from '../components/validationAccount.vue';
+
     const router=useRouter()
     console.log(router.currentRoute.value.params)
     const currentUserId= ref('')
@@ -26,8 +29,29 @@ import {decon} from '../composable/deconnection.js'
             console.error('Erreur lors de la soumission du formulaire:', error.message);
         }
     }
+    const dataUser=ref('waiting for data...')
+    const validMessage=ref()
+    onMounted(async()=>{
+        console.log(dataUser)
+        try {
+            const data = await fetchDD({}, 'checkRoute','GET');
+            if(!data) return {"state":"user not found"}
+            console.log(data)
+            dataUser.value=data.data
+            console.log(data)
+            if(data.data.verificationToken){
+                validMessage.value=data.data.verificationToken
+                console.log("Valider votre inscription")
+            }            
+
+        } catch (error) {
+            // router.push(`/singin`)
+            console.error('Erreur lors de la soumission du formulaire:', error);
+        }
+    })
 </script>
 <template>
+    <ValidationAccount v-if="validMessage" :validMessage="validMessage"/>
     <div class="w-dvww h-dvh flex items-center justify-center">
         <div class="toggleMenu lg:w-[20%] md:w-[30%] w-[10%]  h-full bg-white rounded-lg">
            <div class="flex flex-col items-center gap-5 fixed  lg:w-[20%] md:w-[30%] w-[10%]">
@@ -39,8 +63,9 @@ import {decon} from '../composable/deconnection.js'
             <div class="border border-grayP border-solid rounded-md flex items-center justify-between p-1 mt-1 md:mt-0 md:p-2 w-[90%]">
                 <div class="profImage w-[100%] lg:w-[30%] p-0 md:p-1"><img src="/coupeProfJey.png" alt="" class="rounded-[50%] object-cover"></div>
                 <div class="userInfo hidden md:block">
-                    <p>Jeremie K.</p>
-                    <p>@jey1666</p>
+                    <p v-if="dataUser.userNom"> {{ dataUser.userNom }}</p>
+                    <p v-else>waiting for data ...</p>
+                    <p>{{ dataUser.userName }}</p>
                 </div>
                 <span class="hidden md:block">
                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -118,7 +143,7 @@ import {decon} from '../composable/deconnection.js'
                     <h1>
                         Bonjour, 
                      <br><span id="userConnectedName">
-                            Jeremie K
+                            {{ dataUser.userName }}
                         </span>
                     </h1>
                     <p>

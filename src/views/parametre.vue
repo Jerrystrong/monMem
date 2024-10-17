@@ -121,8 +121,9 @@ const deconection=async function decon(){
             <div class="border border-grayP border-solid rounded-md flex items-center justify-between p-1 mt-1 md:mt-0 md:p-2 w-[90%]">
                 <div class="profImage w-[100%] lg:w-[30%] p-0 md:p-1"><img src="/coupeProfJey.png" alt="" class="rounded-[50%] object-cover"></div>
                 <div class="userInfo hidden md:block">
-                    <p>Jeremie K.</p>
-                    <p>@jey1666</p>
+                    <p v-if="dataUser.userNom">{{ dataUser.userNom }}</p>
+                    <p v-else>waiting for data ...</p>
+                    <p>{{ dataUser.userName }}</p>
                 </div>
                 <span class="hidden md:block">
                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

@@ -22,8 +22,8 @@
                 </div>
                 <div class="m-2">
                     <h2>SecureAIOp</h2>
-                    <p class="font-bold">{{ dataUser.userNom }}</p>
-                    <p>{{ dataUser.userName }}</p>
+                    <p class="font-bold" v-if="dataUser">{{ dataUser.userNom }}</p>
+                    <p v-if="dataUser">{{ dataUser.userName }}</p>
                 </div>
             </div>
             
@@ -101,7 +101,9 @@ onMounted(async()=>{
         if(!data) return {"state":"user not found"}
         console.log(data)
         dataUser.value=data.data
+        console.log(data)
         // router.push(`/app/${data.data._id}`)
+        
 
     } catch (error) {
         // router.push(`/singin`)

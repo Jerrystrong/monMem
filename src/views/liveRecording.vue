@@ -103,6 +103,18 @@ onMounted(async()=>{
         dataUser.value=data.data
         console.log(data)
         // router.push(`/app/${data.data._id}`)
+        if(data){
+            Notification.requestPermission(perm=>{
+                if(perm==='granted'){
+                    new Notification("Suspect detected",{
+                        body:"un potentiel suspect est detecte",
+                        icon:"/logoSansF.png",
+                        badge:"/logoSansF.png"
+                    })
+                }
+            })
+        }
+       
         
 
     } catch (error) {

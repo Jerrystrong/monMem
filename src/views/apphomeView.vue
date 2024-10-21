@@ -29,6 +29,9 @@ import ValidationAccount from '../components/validationAccount.vue';
             console.error('Erreur lors de la soumission du formulaire:', error.message);
         }
     }
+    // ===============
+    
+    // verification de l'autorisation du user
     const dataUser=ref('waiting for data...')
     const validMessage=ref()
     onMounted(async()=>{
@@ -61,7 +64,7 @@ import ValidationAccount from '../components/validationAccount.vue';
             </h1>
             <!-- button user info -->
             <div class="border border-grayP border-solid rounded-md flex items-center justify-between p-1 mt-1 md:mt-0 md:p-2 w-[90%]">
-                <div class="profImage w-[100%] lg:w-[30%] p-0 md:p-1"><img src="/coupeProfJey.png" alt="" class="rounded-[50%] object-cover"></div>
+                <div class="profImage w-[100%] lg:w-[30%] p-0 md:p-1"><img :src="'http://localhost:4005/'+dataUser.userProfil" alt="" class="rounded-[50%] object-cover"></div>
                 <div class="userInfo hidden md:block">
                     <p v-if="dataUser.userNom"> {{ dataUser.userNom }}</p>
                     <p v-else>waiting for data ...</p>
@@ -153,7 +156,7 @@ import ValidationAccount from '../components/validationAccount.vue';
                     </p>
                     <div class="flex justify-start lg:justify-between">
                         <div class="userSete h-7 flex">
-                            <img src="/coupeProfJey.png" alt="" class="rounded-[50%] object-cover h-full -z-20 md:z-10 hover:scale-105 cursor-pointer">
+                            <img :src="'http://localhost:4005/'+dataUser.userProfil" alt="" class="rounded-[50%] object-cover h-full -z-20 md:z-10 hover:scale-105 cursor-pointer">
                             <div class="rounded-[50%] object-cover h-full w-7 bg-white -translate-x-1 -z-30 md:z-0 hover:scale-105 cursor-pointer"></div>
                         </div>
                         <a class="bg-black text-white flex items-center px-2 gap-2 rounded-2xl w-fil truncate  hover:scale-105"  :href="'/app/'+currentUserId+'/parametre'">

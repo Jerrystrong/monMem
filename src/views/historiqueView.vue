@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import SimpleInput from '../components/simpleInput.vue';
 import {fetchD} from '../composable/fetchData.js'
 import {decon} from '../composable/deconnection.js'
+import { fetchD as fetchDD } from '../composable/getData.js';
     const router=useRouter()
     console.log(router.currentRoute.value.params)
     const currentUserId= ref('')
@@ -14,7 +15,7 @@ import {decon} from '../composable/deconnection.js'
         try {
             const data = await fetchD({}, `logout`,"POST");
             if(data.status==='success'){
-                console.log(data.message)
+                console.log(data)
                 router.push(`/`)
             }else{
                 console.log(data.message)
@@ -25,6 +26,27 @@ import {decon} from '../composable/deconnection.js'
             console.error('Erreur lors de la soumission du formulaire:', error.message);
         }
     }
+    // verification de l'autorisation du user
+    const dataUser=ref('waiting for data...')
+    const validMessage=ref()
+    onMounted(async()=>{
+        console.log(dataUser.value)
+        try {
+            const data = await fetchDD({}, 'checkRoute','GET');
+            if(!data) return {"state":"user not found"}
+            console.log(data)
+            dataUser.value=data.data
+            console.log(data)
+            if(data.data.verificationToken){
+                validMessage.value=data.data.verificationToken
+                console.log("Valider votre inscription")
+            }            
+
+        } catch (error) {
+            // router.push(`/singin`)
+            console.error('Erreur lors de la soumission du formulaire:', error);
+        }
+    })
 </script>
 <template>
     <div class="w-dvww h-dvh flex items-center justify-center">
@@ -36,7 +58,7 @@ import {decon} from '../composable/deconnection.js'
             </h1>
             <!-- button user info -->
             <div class="border border-grayP border-solid rounded-md flex items-center justify-between p-1 mt-1 md:mt-0 md:p-2 w-[90%]">
-                <div class="profImage w-[100%] lg:w-[30%] p-0 md:p-1"><img src="/coupeProfJey.png" alt="" class="rounded-[50%] object-cover"></div>
+                <div class="profImage w-[100%] lg:w-[30%] p-0 md:p-1"><img :src="'http://localhost:4005/'+dataUser.userProfil" alt="" class="rounded-[50%] object-cover"></div>
                 <div class="userInfo hidden md:block">
                     <p>Jeremie K.</p>
                     <p>@jey1666</p>

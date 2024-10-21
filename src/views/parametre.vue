@@ -5,7 +5,7 @@ import {fetchD} from '../composable/fetchData.js'
 import {decon} from '../composable/deconnection.js'
 import SimpleInput from '../components/simpleInput.vue';
     const router=useRouter()
-    console.log(router.currentRoute.value.params)
+    // console.log(router.currentRoute.value.params)
     const currentUserId= ref('')
     currentUserId.value=router.currentRoute.value.params['id']
     const scrol=ref(false)
@@ -14,8 +14,8 @@ import SimpleInput from '../components/simpleInput.vue';
         isVisible.value=isVisible.value===user?0:user
         
     }
-    console.log(currentUserId.value)
-    // add familly member logic
+    // console.log(currentUserId.value)
+    // add familly member logic ui part
     const addMemberLevel=ref(false)
     const addMember=()=>{
         addMemberLevel.value=!addMemberLevel.value
@@ -31,15 +31,16 @@ import SimpleInput from '../components/simpleInput.vue';
     
     const stateError=ref('')
     const dataUser=ref('')
-  
+    // recuperation du fichier introduit
     const putFileName=(e)=>{
         userProfil.value=e.currentTarget.files[0].name
     }
     // fonction pour ajouter le membre de la famille
     const updateFamily=async ()=>{
+        // creation du json containant les donnees remplie au formulaire 
         const d={memberNom:userNom.value,memberRole:userRole.value,memberProfil:userProfil.value}
-        console.log(d)
         try {
+            // appelle de la fonction fetchD qui permettra d'ajouter un membre de famille
             const data = await fetchD({member:d}, `app/${currentUserId.value}/addFamilly`,"POST");
             if(data.status==='success'){
                 console.log(data.data)
@@ -78,6 +79,7 @@ import SimpleInput from '../components/simpleInput.vue';
     // mise en jour auto des donnees au refresh
     onMounted(async()=>{
     try {
+        // recuperation des information relative à l'utilisateur connecté
         const data = await fetchD({}, `app/${currentUserId.value}/parametre`,"POST");
         if(data.status==='success'){
             console.log(data.data)
@@ -110,7 +112,7 @@ const deconection=async function decon(){
 }
 </script>
 <template>
-    <div class="w-dvww h-dvh flex items-center justify-center">
+    <div class="w-dvw h-dvh flex items-center justify-center">
         <div class="toggleMenu lg:w-[20%] md:w-[30%] w-[10%]  h-full bg-white rounded-lg">
            <div class="flex flex-col items-center gap-5 fixed  lg:w-[20%] md:w-[30%] w-[10%]">
             <h1 class="text-black text-[36px] p-1 absolute left-[100%] md:relative md:left-0 md:w-fit w-screen bg-white z-20" >
@@ -119,7 +121,7 @@ const deconection=async function decon(){
             </h1>
             <!-- button user info -->
             <div class="border border-grayP border-solid rounded-md flex items-center justify-between p-1 mt-1 md:mt-0 md:p-2 w-[90%]">
-                <div class="profImage w-[100%] lg:w-[30%] p-0 md:p-1"><img src="/coupeProfJey.png" alt="" class="rounded-[50%] object-cover"></div>
+                <div class="profImage w-[100%] lg:w-[30%] p-0 md:p-1"><img :src="'http://localhost:4005/'+dataUser.userProfil" alt="" class="rounded-[50%] object-cover"></div>
                 <div class="userInfo hidden md:block">
                     <p v-if="dataUser.userNom">{{ dataUser.userNom }}</p>
                     <p v-else>waiting for data ...</p>
@@ -221,7 +223,7 @@ const deconection=async function decon(){
                         </template>
                     </SimpleInput>
                     <div class="font-a h-[78px] rounded-lg p-1 flex gap-5 items-center">
-                        <img src="/coupeProfJey.png" alt="" class="h-full rounded-[50%]">
+                        <img :src="'http://localhost:4005/'+dataUser.userProfil" alt="" class="h-full rounded-[50%]">
                         <p>Changer le profil</p>
                     </div>
                     <SimpleInput :label="{label:'Confirm password',type:'password',text:'confirmez le mot de passe',name:'userProfil'}">
@@ -233,6 +235,7 @@ const deconection=async function decon(){
                 </div>
             </div>
 
+            <!--  familly member section -->
             <div class="additionalSetting grid md:grid-cols-2  my-4 gap-2">
                 <div class="famillyMember bg-white w-[90%] md:w-[100%] lg:w-[70%] m-auto h-full p-3 flex flex-col gap-1 rounded-t-lg relative">
                     <h3>Family member</h3>
@@ -246,15 +249,7 @@ const deconection=async function decon(){
                         </div>
                     </div>
 
-                     <!-- <div class="itemFamilly flex justify-between items-center relative">
-                        <img src="/coupeProfJey.png" alt="" class="rounded-[50%] w-5 h-5">
-                        <p>Jeremie Kimpioka</p>
-                        <img src="/more.png" alt="" class="h-fit cursor-pointer" @click="detailUser(2)">
-                        <div class="bg-greenLight-500 w-7 h-7 absolute right-0 -top-6 grid p-1 text-white" v-show="isVisible===2" ref="user2">
-                            <span class="w-full truncate cursor-pointer hover:greenLight-400">Suppr</span>
-                            <span class="w-full truncate cursor-pointer">Modif</span>
-                        </div>
-                    </div> -->
+                     
                     <!-- add familly member section  -->
                     <div class="absolute w-full bg-white left-0 -top-[100%] shadow p-2 grid gap-1 rounded-lg" v-show="addMemberLevel">
                         <img src="/close1.png" alt="" class="w-3 ml-[90%] cursor-pointer" @click="addMember">

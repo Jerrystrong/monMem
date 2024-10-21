@@ -15,7 +15,7 @@ const userFile=ref(null)
 const putFileName=function(e){
         const profil=e.currentTarget.files
         // console.log(e.currentTarget.files)
-        userFile.value=e.currentTarget.files
+        userFile.value=e.currentTarget.files[0]
         userProfil.value=profil[0].name
         let fileR=new FileReader()
         fileR.onload=()=>{
@@ -40,9 +40,25 @@ const submitUser=async()=>{
     console.log("user adding")
     console.log(userFile.value)
     console.log(userEmail.value);
-
+    const valObj=ref({ userEmail:userEmail.value,userNom:userNom.value,userGenre:userGenre.value,userAge:userAge.value,userAccountType:userAccountType.value,userName:userName.value,userPw:userPw.value,userPwConf:userPwConf.value,userProfil:userFile.value})
+    const formData=new FormData()
+    for (const [key,value] of Object.entries(valObj.value)) {
+        formData.append(key,value)
+    }
+    console.log(formData)
     try {
-        const data = await fetchD({ userEmail:userEmail.value,userNom:userNom.value,userGenre:userGenre.value,userAge:userAge.value,userAccountType:userAccountType.value,userName:userName.value,userPw:userPw.value,userPwConf:userPwConf.value,userProfil:userProfil.value}, 'singUP',"POST");
+            const response = await fetch(`http://localhost:4005/singup`, {
+                method: "POST",
+                body: formData,
+                credentials: 'include',
+            });
+
+        // if (!response.ok) {
+        //     throw new Error(`HTTP error! Status: ${response.status}`);
+        // }fetchD({ userEmail:userEmail.value,userNom:userNom.value,userGenre:userGenre.value,userAge:userAge.value,userAccountType:userAccountType.value,userName:userName.value,userPw:userPw.value,userPwConf:userPwConf.value,userProfil:userFile.value}, 'singUP',"POST");
+
+        const data = await  response.json();
+        console.log(data)
         if(data.status==='success'){
 
             router.push(`/app/${data.Data._id}`)

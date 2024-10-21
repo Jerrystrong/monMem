@@ -16,6 +16,15 @@ const code=ref('')
 const success=ref('')
 
 const showResult = async () => {
+    Notification.requestPermission(perm=>{
+        if(perm==='granted'){
+            new Notification("Compte creer avec success ",{
+                body:"Vous avez réusssi un email contenant le code de valisation",
+                icon:"/logoSansF.png",
+                badge:"/logoSansF.png",
+            })
+        }
+    })
     code.value=val1.value+val2.value+val3.value+val4.value+val5.value
 
     try {
